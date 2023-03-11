@@ -12,7 +12,7 @@ const MyDocument: React.FC<DocumentProps> = (props) => {
         <link
           rel='preconnect'
           href='https://fonts.gstatic.com'
-          crossOrigin='crossorigin'
+          // crossOrigin='crossorigin' |
         />
         <link
           rel='stylesheet'

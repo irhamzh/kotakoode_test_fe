@@ -1,8 +1,9 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
-import { StaffBrowseRequest, StaffBrowseResponse, StaffDetailResponse } from '@/types/staff'
-import { apiBaseQuery, mockApiBaseQuery } from '@/utils/api'
+import { StaffUpdateRequest, StaffBrowseRequest, StaffBrowseResponse, StaffDetailResponse } from '@/types/staff'
+import { apiBaseQuery, } from '@/utils/api'
+import { AttendanceBaseResponse } from '@/types/attendance'
 
 const api = createApi({
   reducerPath: 'staff',
@@ -24,6 +25,37 @@ const api = createApi({
       }),
       providesTags: ['Staff'],
     }),
+    
+    // api features implementation
+    getSelfUser: builder.query({
+      query: () => ({
+        url: "/auth/selfUser",
+      }),
+    }),
+    putUpdateUser: builder.mutation<StaffDetailResponse, StaffUpdateRequest>({
+      query: (data) => ({
+        url: `/staffs/${data.data.attributes.id}`,
+        method: 'PUT',
+        body: data
+      }),
+    }),
+    getListAttendances: builder.query<AttendanceBaseResponse, string>({
+      query: (id) => ({
+        url: `/staffs/${id}/attendances`,
+      }),
+    }),
+    postNewAttendance: builder.mutation<AttendanceBaseResponse, String>({
+      query: (id) => ({
+        url: `/staffs/${id}/attendance/clock-in`,
+        method: 'POST',
+      }),
+    }),
+    putUpdateAttendance: builder.mutation<AttendanceBaseResponse, String>({
+      query: (id) => ({
+        url: `/staffs/${id}/attendance/clock-out`,
+        method: 'PUT',
+      }),
+    }),
   }),
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
@@ -33,6 +65,15 @@ const api = createApi({
 })
 
 // Export hooks for usage in functional components
-export const { useGetListStaffsQuery, useGetDetailStaffQuery, util: exampleUtil } = api
+export const { 
+  useGetListStaffsQuery,
+  useGetDetailStaffQuery,
+  useGetListAttendancesQuery,
+  useGetSelfUserQuery,
+  usePutUpdateUserMutation,
+  usePostNewAttendanceMutation,
+  usePutUpdateAttendanceMutation,
+  util: exampleUtil
+} = api
 
 export default api

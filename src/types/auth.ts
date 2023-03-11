@@ -20,5 +20,10 @@ export interface AuthForm {
   password: string
 }
 
+export interface AuthLogout {
+  message: string
+}
+
 export type AuthResponse = BaseResponse<Auth>
 export type AuthRequest = BaseRequest<AuthForm>
+export type AuthLogoutResponse = BaseResponse<AuthLogout>

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import Language from '@/components/Language'
 import Skeleton from '@/components/Skeleton'
 import Blank from '@/layouts/Blank'
-import { useGetListStaffsQuery } from '@/services/staffs'
+import { useGetListStaffsQuery, useGetSelfUserQuery } from '@/services/staffs'
 import { Staff, StaffBrowseRequest } from '@/types/staff'
 
 const ExampleList: FC = () => {
@@ -19,6 +19,8 @@ const ExampleList: FC = () => {
   })
 
   const { data: staffs, isLoading } = useGetListStaffsQuery(query)
+
+  const { data: selfData } = useGetSelfUserQuery("")
 
   return (
     <Blank title={t('example:title')}>
@@ -53,8 +55,9 @@ const ExampleList: FC = () => {
                 className='group relative'
               >
                 <div className='min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80'>
+                  {/* differs the modul card for own detail */}
                   <img
-                    src={`https://ui-avatars.com/api/?name=${attributes.firstName}+${attributes.lastName}&background=0D8ABC&color=fff`}
+                    src={`https://ui-avatars.com/api/?name=${attributes.firstName}+${attributes.lastName}&background=${selfData?.data[0].id == attributes.id ? "FF6242" : "0D8ABC"}&color=fff`}
                     alt={attributes.fullName}
                     className='h-full w-full object-cover object-center lg:h-full lg:w-full'
                     loading='lazy'
